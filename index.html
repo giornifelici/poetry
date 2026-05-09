@@ -15,10 +15,10 @@
       --sage: #7a8c72;
       --mist: #d4cfc8;
       --shadow: rgba(26,18,9,0.12);
+      --toc-w: 280px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -29,7 +29,6 @@
       overflow-x: hidden;
     }
 
-    /* GRAIN TEXTURE OVERLAY */
     body::before {
       content: '';
       position: fixed;
@@ -40,7 +39,200 @@
       opacity: 0.4;
     }
 
-    /* HEADER */
+    /* ── INDICE LATERALE ─────────────────────────────── */
+    #toc {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--toc-w);
+      height: 100vh;
+      background: rgba(245,239,230,0.97);
+      backdrop-filter: blur(16px);
+      border-right: 1px solid var(--mist);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 4px 0 30px rgba(26,18,9,0.08);
+    }
+
+    #toc.open { transform: translateX(0); }
+
+    .toc-header {
+      padding: 1.4rem 1.4rem 1rem;
+      border-bottom: 1px solid var(--mist);
+      flex-shrink: 0;
+    }
+
+    .toc-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 100;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--sepia);
+      margin-bottom: 0.8rem;
+    }
+
+    .toc-search {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--mist);
+      padding: 0.35rem 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .toc-search::placeholder { color: var(--sepia); font-style: italic; }
+    .toc-search:focus { border-bottom-color: var(--rust); }
+
+    .toc-sort {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+    }
+
+    .toc-sort-btn {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--mist);
+      color: var(--ink);
+      padding: 0.25rem 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toc-sort-btn.active, .toc-sort-btn:hover {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .toc-count {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 100;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--sepia);
+      margin-top: 0.5rem;
+    }
+
+    .toc-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.6rem 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--mist) transparent;
+    }
+
+    .toc-list::-webkit-scrollbar { width: 4px; }
+    .toc-list::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
+
+    /* Lettere alfabetiche come separatori */
+    .toc-letter {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sepia);
+      padding: 0.6rem 1.4rem 0.2rem;
+      border-top: 1px solid var(--mist);
+      margin-top: 0.2rem;
+    }
+
+    .toc-letter:first-child { border-top: none; margin-top: 0; }
+
+    .toc-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.38rem 1.4rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .toc-item:hover { background: rgba(200,168,122,0.12); }
+    .toc-item.active { background: rgba(139,58,42,0.08); }
+
+    .toc-item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.92rem;
+      color: var(--ink);
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .toc-item.active .toc-item-title { color: var(--rust); font-style: italic; }
+
+    .toc-item-date {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 100;
+      font-size: 0.55rem;
+      color: var(--sepia);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .toc-item.hidden-toc { display: none; }
+
+    /* ── TOGGLE BUTTON ───────────────────────────────── */
+    #tocToggle {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      z-index: 600;
+      background: var(--paper);
+      border: 1px solid var(--mist);
+      border-left: none;
+      padding: 1rem 0.5rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      transition: left 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
+      box-shadow: 2px 0 12px var(--shadow);
+    }
+
+    #tocToggle:hover { box-shadow: 3px 0 20px rgba(26,18,9,0.15); }
+
+    #tocToggle.shifted { left: var(--toc-w); }
+
+    .toggle-icon {
+      font-size: 0.7rem;
+      color: var(--sepia);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 100;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .toggle-arrow {
+      font-size: 0.7rem;
+      color: var(--sepia);
+      transition: transform 0.35s;
+    }
+
+    #tocToggle.shifted .toggle-arrow { transform: rotate(180deg); }
+
+    /* ── HEADER ──────────────────────────────────────── */
     header {
       position: relative;
       min-height: 100vh;
@@ -84,11 +276,7 @@
       animation: fadeUp 1.2s ease 0.5s forwards;
     }
 
-    h1 em {
-      font-style: italic;
-      color: var(--rust);
-      display: block;
-    }
+    h1 em { font-style: italic; color: var(--rust); display: block; }
 
     .header-sub {
       font-family: 'Josefin Sans', sans-serif;
@@ -140,7 +328,7 @@
       animation: scrollAnim 2s ease-in-out infinite 2s;
     }
 
-    /* SEARCH + FILTERS */
+    /* ── CONTROLS ────────────────────────────────────── */
     .controls {
       position: sticky;
       top: 0;
@@ -155,11 +343,7 @@
       flex-wrap: wrap;
     }
 
-    .search-wrap {
-      position: relative;
-      flex: 1;
-      min-width: 200px;
-    }
+    .search-wrap { position: relative; flex: 1; min-width: 200px; }
 
     .search-wrap input {
       width: 100%;
@@ -174,20 +358,10 @@
       transition: border-color 0.3s;
     }
 
-    .search-wrap input::placeholder {
-      color: var(--sepia);
-      font-style: italic;
-    }
+    .search-wrap input::placeholder { color: var(--sepia); font-style: italic; }
+    .search-wrap input:focus { border-bottom-color: var(--rust); }
 
-    .search-wrap input:focus {
-      border-bottom-color: var(--rust);
-    }
-
-    .filter-btns {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
+    .filter-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
     .filter-btn {
       font-family: 'Josefin Sans', sans-serif;
@@ -218,23 +392,20 @@
       white-space: nowrap;
     }
 
-    /* GRID */
+    /* ── GRID ────────────────────────────────────────── */
     main {
       max-width: 1400px;
       margin: 0 auto;
       padding: 4rem 2rem 6rem;
     }
 
-    .grid {
-      columns: 1;
-      column-gap: 2rem;
-    }
+    .grid { columns: 1; column-gap: 2rem; }
 
-    @media (min-width: 680px) { .grid { columns: 2; } }
+    @media (min-width: 680px)  { .grid { columns: 2; } }
     @media (min-width: 1024px) { .grid { columns: 3; } }
     @media (min-width: 1300px) { .grid { columns: 4; } }
 
-    /* POEM CARD */
+    /* ── POEM CARD ───────────────────────────────────── */
     .poem-card {
       break-inside: avoid;
       margin-bottom: 2rem;
@@ -288,9 +459,7 @@
       opacity: 0.5;
     }
 
-    .card-body {
-      padding: 1.4rem 1.4rem 1.2rem;
-    }
+    .card-body { padding: 1.4rem 1.4rem 1.2rem; }
 
     .card-date {
       font-family: 'Josefin Sans', sans-serif;
@@ -348,7 +517,7 @@
       color: var(--sepia);
     }
 
-    /* MODAL */
+    /* ── MODAL ───────────────────────────────────────── */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -364,10 +533,7 @@
       overflow-y: auto;
     }
 
-    .modal-overlay.open {
-      opacity: 1;
-      visibility: visible;
-    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
 
     .modal {
       background: var(--paper);
@@ -379,16 +545,9 @@
       transition: transform 0.4s ease;
     }
 
-    .modal-overlay.open .modal {
-      transform: translateY(0);
-    }
+    .modal-overlay.open .modal { transform: translateY(0); }
 
-    .modal-img-wrap {
-      width: 100%;
-      max-height: 380px;
-      overflow: hidden;
-      position: relative;
-    }
+    .modal-img-wrap { width: 100%; max-height: 380px; overflow: hidden; position: relative; }
 
     .modal-img {
       width: 100%;
@@ -409,20 +568,14 @@
 
     .modal-img-gradient {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       height: 120px;
       background: linear-gradient(to bottom, transparent, var(--paper));
     }
 
-    .modal-body {
-      padding: 2.5rem 3rem 3rem;
-    }
+    .modal-body { padding: 2.5rem 3rem 3rem; }
 
-    @media (max-width: 520px) {
-      .modal-body { padding: 1.5rem 1.5rem 2rem; }
-    }
+    @media (max-width: 520px) { .modal-body { padding: 1.5rem 1.5rem 2rem; } }
 
     .modal-meta {
       font-family: 'Josefin Sans', sans-serif;
@@ -461,7 +614,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: gap;
+      flex-wrap: wrap;
       gap: 1rem;
     }
 
@@ -489,13 +642,11 @@
 
     .modal-close {
       position: absolute;
-      top: 1.2rem;
-      right: 1.2rem;
+      top: 1.2rem; right: 1.2rem;
       background: rgba(26,18,9,0.6);
       border: none;
       color: white;
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border-radius: 50%;
       font-size: 1.2rem;
       cursor: pointer;
@@ -514,8 +665,7 @@
       transform: translateY(-50%);
       background: rgba(245,239,230,0.9);
       border: 1px solid var(--mist);
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -530,26 +680,12 @@
     .modal-nav.prev { left: -20px; }
     .modal-nav.next { right: -20px; }
 
-    /* EMPTY STATE */
-    .empty {
-      text-align: center;
-      padding: 6rem 2rem;
-      grid-column: 1/-1;
-    }
+    /* ── EMPTY STATE ─────────────────────────────────── */
+    .empty { text-align: center; padding: 6rem 2rem; grid-column: 1/-1; }
+    .empty p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.5rem; color: var(--sepia); }
 
-    .empty p {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1.5rem;
-      color: var(--sepia);
-    }
-
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      border-top: 1px solid var(--mist);
-    }
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--mist); }
 
     footer p {
       font-family: 'Josefin Sans', sans-serif;
@@ -560,15 +696,12 @@
       text-transform: uppercase;
     }
 
-    footer a {
-      color: var(--rust);
-      text-decoration: none;
-    }
+    footer a { color: var(--rust); text-decoration: none; }
 
-    /* ANIMATIONS */
+    /* ── ANIMATIONS ──────────────────────────────────── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes scrollAnim {
@@ -582,16 +715,49 @@
       transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
     }
 
-    .poem-card.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .poem-card.visible  { opacity: 1; transform: translateY(0); }
+    .poem-card.hidden   { display: none; }
+
+    /* ── TOC OVERLAY (mobile) ────────────────────────── */
+    #tocOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,18,9,0.4);
+      z-index: 490;
     }
 
-    .poem-card.hidden { display: none; }
+    @media (max-width: 768px) {
+      #tocOverlay.visible { display: block; }
+    }
   </style>
 </head>
 <body>
 
+<!-- ── INDICE LATERALE ─────────────────────────────────── -->
+<div id="tocOverlay"></div>
+
+<nav id="toc" aria-label="Indice delle poesie">
+  <div class="toc-header">
+    <div class="toc-title">Indice — 74 poesie</div>
+    <input class="toc-search" id="tocSearch" type="text"
+           placeholder="Cerca nell'indice…" autocomplete="off">
+    <div class="toc-sort">
+      <button class="toc-sort-btn active" data-sort="alpha">A–Z</button>
+      <button class="toc-sort-btn" data-sort="date-asc">Cronologico ↑</button>
+      <button class="toc-sort-btn" data-sort="date-desc">Cronologico ↓</button>
+    </div>
+    <div class="toc-count" id="tocCount"></div>
+  </div>
+  <div class="toc-list" id="tocList"></div>
+</nav>
+
+<button id="tocToggle" aria-label="Apri indice">
+  <span class="toggle-arrow">›</span>
+  <span class="toggle-icon">Indice</span>
+</button>
+
+<!-- ── HEADER ──────────────────────────────────────────── -->
 <header>
   <div class="header-ornament">Raccolta poetica completa</div>
   <h1>Giorni<em>Felici</em></h1>
@@ -603,9 +769,11 @@
   </div>
 </header>
 
+<!-- ── BARRA FILTRI ─────────────────────────────────────── -->
 <div class="controls">
   <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="Cerca per titolo o versi…" autocomplete="off">
+    <input type="text" id="searchInput"
+           placeholder="Cerca per titolo o versi…" autocomplete="off">
   </div>
   <div class="filter-btns">
     <button class="filter-btn active" data-filter="all">Tutte</button>
@@ -626,7 +794,7 @@
   <a href="https://giornifelici.wordpress.com" target="_blank">giornifelici.wordpress.com</a></p>
 </footer>
 
-<!-- MODAL -->
+<!-- ── MODAL ────────────────────────────────────────────── -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modal">
     <button class="modal-close" id="modalClose" title="Chiudi">✕</button>
@@ -652,12 +820,164 @@
   let currentIdx = 0;
   let activeFilter = 'all';
   let searchTerm = '';
+  let tocSortMode = 'alpha';
+  let tocSearchTerm = '';
+  let tocOpen = false;
 
   // ── HEADER COUNT ─────────────────────────────────────
   document.getElementById('headerCount').textContent =
     `${POEMS.length} poesie raccolte`;
 
-  // ── BUILD GRID ───────────────────────────────────────
+  // ══════════════════════════════════════════════════════
+  // INDICE LATERALE
+  // ══════════════════════════════════════════════════════
+
+  // Mappa mese→numero per ordinamento cronologico
+  const MESI = {
+    'gennaio':1,'febbraio':2,'marzo':3,'aprile':4,'maggio':5,'giugno':6,
+    'luglio':7,'agosto':8,'settembre':9,'ottobre':10,'novembre':11,'dicembre':12
+  };
+
+  function parseDateVal(dateStr) {
+    const parts = dateStr.toLowerCase().split(' ');
+    // "24 marzo 2026" → day=24, month=3, year=2026
+    const day   = parseInt(parts[0]) || 0;
+    const month = MESI[parts[1]] || 0;
+    const year  = parseInt(parts[2]) || 0;
+    return year * 10000 + month * 100 + day;
+  }
+
+  function getSortedPoems() {
+    const list = POEMS.map((p, i) => ({ ...p, origIdx: i }));
+    if (tocSortMode === 'alpha') {
+      return list.sort((a,b) => a.title.localeCompare(b.title, 'it'));
+    } else if (tocSortMode === 'date-asc') {
+      return list.sort((a,b) => parseDateVal(a.date) - parseDateVal(b.date));
+    } else {
+      return list.sort((a,b) => parseDateVal(b.date) - parseDateVal(a.date));
+    }
+  }
+
+  function buildToc() {
+    const list = document.getElementById('tocList');
+    list.innerHTML = '';
+    const sorted = getSortedPoems();
+
+    let currentLetter = '';
+    let visibleCount = 0;
+
+    sorted.forEach(poem => {
+      const matchSearch = !tocSearchTerm ||
+        poem.title.toLowerCase().includes(tocSearchTerm) ||
+        poem.date.toLowerCase().includes(tocSearchTerm);
+
+      if (tocSortMode === 'alpha') {
+        const letter = poem.title[0].toUpperCase();
+        if (letter !== currentLetter) {
+          currentLetter = letter;
+          const sep = document.createElement('div');
+          sep.className = 'toc-letter';
+          sep.textContent = letter;
+          if (!matchSearch) sep.style.display = 'none';
+          sep._letter = letter;
+          list.appendChild(sep);
+        }
+      }
+
+      const btn = document.createElement('button');
+      btn.className = 'toc-item' + (matchSearch ? '' : ' hidden-toc');
+      btn.dataset.origIdx = poem.origIdx;
+
+      // Mostra mese+anno in modalità cronologica, solo anno in alfa
+      const dateDisplay = tocSortMode === 'alpha'
+        ? poem.date.split(' ').slice(1).join(' ')  // "marzo 2026"
+        : poem.date;
+
+      btn.innerHTML = `
+        <span class="toc-item-title">${poem.title}</span>
+        <span class="toc-item-date">${dateDisplay}</span>`;
+
+      btn.addEventListener('click', () => {
+        openModalByPoem(poem.origIdx);
+        // Su mobile chiudi il toc
+        if (window.innerWidth < 768) closeToc();
+      });
+
+      list.appendChild(btn);
+      if (matchSearch) visibleCount++;
+    });
+
+    // Nascondi separatori di lettera senza voci visibili (solo in modalità alfa)
+    if (tocSortMode === 'alpha') {
+      let nodes = Array.from(list.children);
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].classList.contains('toc-letter')) {
+          // Controlla se il prossimo nodo visibile è ancora dello stesso blocco
+          let hasVisible = false;
+          for (let j = i+1; j < nodes.length; j++) {
+            if (nodes[j].classList.contains('toc-letter')) break;
+            if (!nodes[j].classList.contains('hidden-toc')) { hasVisible = true; break; }
+          }
+          nodes[i].style.display = hasVisible ? '' : 'none';
+        }
+      }
+    }
+
+    document.getElementById('tocCount').textContent =
+      tocSearchTerm ? `${visibleCount} di ${POEMS.length}` : `${POEMS.length} poesie`;
+  }
+
+  function highlightTocItem(origIdx) {
+    document.querySelectorAll('.toc-item').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.origIdx) === origIdx);
+    });
+    // Scroll l'item attivo nel viewport dell'indice
+    const active = document.querySelector('.toc-item.active');
+    if (active) {
+      active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  // Apri/chiudi TOC
+  function openToc() {
+    tocOpen = true;
+    document.getElementById('toc').classList.add('open');
+    document.getElementById('tocToggle').classList.add('shifted');
+    document.getElementById('tocOverlay').classList.add('visible');
+  }
+
+  function closeToc() {
+    tocOpen = false;
+    document.getElementById('toc').classList.remove('open');
+    document.getElementById('tocToggle').classList.remove('shifted');
+    document.getElementById('tocOverlay').classList.remove('visible');
+  }
+
+  document.getElementById('tocToggle').addEventListener('click', () => {
+    tocOpen ? closeToc() : openToc();
+  });
+
+  document.getElementById('tocOverlay').addEventListener('click', closeToc);
+
+  // Ricerca nell'indice
+  document.getElementById('tocSearch').addEventListener('input', e => {
+    tocSearchTerm = e.target.value.toLowerCase().trim();
+    buildToc();
+  });
+
+  // Ordinamento
+  document.querySelectorAll('.toc-sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.toc-sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tocSortMode = btn.dataset.sort;
+      buildToc();
+    });
+  });
+
+  // ══════════════════════════════════════════════════════
+  // GRIGLIA
+  // ══════════════════════════════════════════════════════
   function buildGrid() {
     const grid = document.getElementById('grid');
     grid.innerHTML = '';
@@ -667,22 +987,20 @@
     }
 
     filtered.forEach((poem, i) => {
-      const lines = poem.text.trim().split('\n').length;
+      const lines   = poem.text.trim().split('\n').length;
       const preview = poem.text.trim().split('\n').slice(0, 5).join('\n');
+      const origIdx = POEMS.indexOf(poem);
 
       const card = document.createElement('article');
       card.className = 'poem-card';
-      card.dataset.idx = i;
+      card.dataset.origIdx = origIdx;
       card.innerHTML = `
         <div class="card-inner">
           <div style="overflow:hidden">
-            <img class="card-img" src="${poem.image}"
-              alt="${poem.title}"
+            <img class="card-img" src="${poem.image}" alt="${poem.title}"
               loading="lazy"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-            <div class="card-img-placeholder" style="display:none">
-              <span>✦</span>
-            </div>
+            <div class="card-img-placeholder" style="display:none"><span>✦</span></div>
           </div>
           <div class="card-body">
             <div class="card-date">${poem.date}</div>
@@ -702,7 +1020,6 @@
     document.getElementById('resultsCount').textContent =
       `${filtered.length} / ${POEMS.length}`;
 
-    // Intersection observer for staggered reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
@@ -715,7 +1032,7 @@
     document.querySelectorAll('.poem-card').forEach(c => observer.observe(c));
   }
 
-  // ── FILTER + SEARCH ──────────────────────────────────
+  // ── FILTRI GRIGLIA ────────────────────────────────────
   function applyFilters() {
     filtered = POEMS.filter(poem => {
       const matchSearch = !searchTerm ||
@@ -726,10 +1043,10 @@
       const lines = poem.text.trim().split('\n').length;
       const matchFilter =
         activeFilter === 'all' ||
-        (activeFilter === 'brevi' && lines <= 12) ||
-        (activeFilter === 'lunghe' && lines > 20) ||
-        (activeFilter === '2026' && poem.date.includes('2026')) ||
-        (activeFilter === '2025' && poem.date.includes('2025'));
+        (activeFilter === 'brevi'  && lines <= 12) ||
+        (activeFilter === 'lunghe' && lines > 20)  ||
+        (activeFilter === '2026'   && poem.date.includes('2026')) ||
+        (activeFilter === '2025'   && poem.date.includes('2025'));
 
       return matchSearch && matchFilter;
     });
@@ -750,12 +1067,35 @@
     });
   });
 
-  // ── MODAL ────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════
+  // MODAL
+  // ══════════════════════════════════════════════════════
   function openModal(filteredIdx) {
     currentIdx = filteredIdx;
     renderModal();
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+    // Evidenzia nell'indice
+    highlightTocItem(POEMS.indexOf(filtered[filteredIdx]));
+  }
+
+  // Apri da indice (per origIdx globale)
+  function openModalByPoem(origIdx) {
+    // Resetta filtri se la poesia non è visibile
+    const fIdx = filtered.indexOf(POEMS[origIdx]);
+    if (fIdx === -1) {
+      // Togli filtri e apri
+      activeFilter = 'all';
+      searchTerm = '';
+      document.getElementById('searchInput').value = '';
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-filter="all"]').classList.add('active');
+      filtered = [...POEMS];
+      buildGrid();
+      openModal(filtered.indexOf(POEMS[origIdx]));
+    } else {
+      openModal(fIdx);
+    }
   }
 
   function closeModal() {
@@ -767,7 +1107,6 @@
     const poem = filtered[currentIdx];
     if (!poem) return;
 
-    // Image
     const wrap = document.getElementById('modalImgWrap');
     wrap.innerHTML = `
       <img class="modal-img" src="${poem.image}" alt="${poem.title}"
@@ -777,17 +1116,16 @@
       </div>
       <div class="modal-img-gradient"></div>`;
 
-    document.getElementById('modalMeta').textContent = poem.date;
+    document.getElementById('modalMeta').textContent  = poem.date;
     document.getElementById('modalTitle').textContent = poem.title;
-    document.getElementById('modalPoem').textContent = poem.text;
-    document.getElementById('modalLink').href = poem.url;
+    document.getElementById('modalPoem').textContent  = poem.text;
+    document.getElementById('modalLink').href         = poem.url;
 
-    // Nav
-    document.getElementById('modalPrev').style.display = currentIdx > 0 ? 'flex' : 'none';
-    document.getElementById('modalNext').style.display = currentIdx < filtered.length - 1 ? 'flex' : 'none';
+    document.getElementById('modalPrev').style.display =
+      currentIdx > 0 ? 'flex' : 'none';
+    document.getElementById('modalNext').style.display =
+      currentIdx < filtered.length - 1 ? 'flex' : 'none';
 
-    // Scroll to top of modal
-    document.getElementById('modal').scrollIntoView({ behavior: 'instant', block: 'start' });
     document.getElementById('modalOverlay').scrollTop = 0;
   }
 
@@ -796,21 +1134,25 @@
     if (e.target === document.getElementById('modalOverlay')) closeModal();
   });
   document.getElementById('modalPrev').addEventListener('click', () => {
-    if (currentIdx > 0) { currentIdx--; renderModal(); }
+    if (currentIdx > 0) { currentIdx--; renderModal(); highlightTocItem(POEMS.indexOf(filtered[currentIdx])); }
   });
   document.getElementById('modalNext').addEventListener('click', () => {
-    if (currentIdx < filtered.length - 1) { currentIdx++; renderModal(); }
+    if (currentIdx < filtered.length - 1) { currentIdx++; renderModal(); highlightTocItem(POEMS.indexOf(filtered[currentIdx])); }
   });
 
-  // Keyboard navigation
   document.addEventListener('keydown', e => {
     if (!document.getElementById('modalOverlay').classList.contains('open')) return;
-    if (e.key === 'Escape') closeModal();
-    if (e.key === 'ArrowLeft' && currentIdx > 0) { currentIdx--; renderModal(); }
-    if (e.key === 'ArrowRight' && currentIdx < filtered.length - 1) { currentIdx++; renderModal(); }
+    if (e.key === 'Escape')     closeModal();
+    if (e.key === 'ArrowLeft'  && currentIdx > 0) {
+      currentIdx--; renderModal(); highlightTocItem(POEMS.indexOf(filtered[currentIdx]));
+    }
+    if (e.key === 'ArrowRight' && currentIdx < filtered.length - 1) {
+      currentIdx++; renderModal(); highlightTocItem(POEMS.indexOf(filtered[currentIdx]));
+    }
   });
 
   // ── INIT ─────────────────────────────────────────────
+  buildToc();
   buildGrid();
 </script>
 </body>
